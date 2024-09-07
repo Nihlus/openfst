@@ -55,7 +55,7 @@ if ("${CMAKE_GENERATOR}" STREQUAL "Xcode")
     # Xcode doesn't like object libraries
     set(OPENFST_OBJECT_LIBRARY_TYPE STATIC)
 else ()
-    set(OPENFST_OBJECT_LIBRARY_TYPE ${OPENFST_OBJECT_LIBRARY_TYPE})
+    set(OPENFST_OBJECT_LIBRARY_TYPE OBJECT)
 endif ()
 
 add_subdirectory(src)
