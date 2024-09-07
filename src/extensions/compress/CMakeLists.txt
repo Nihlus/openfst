@@ -28,7 +28,7 @@ target_link_libraries(fstcompressscript
 
 install(
     TARGETS fstcompressscript
-    EXPORT fstcompresscript
+    EXPORT openfst
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -51,6 +51,6 @@ target_link_libraries(fstcompress
 
 install(
     TARGETS fstcompress
-    EXPORT fst
+    EXPORT openfst
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

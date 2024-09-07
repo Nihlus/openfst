@@ -52,3 +52,5 @@ add_compile_options(
 )
 
 add_subdirectory(src)
+
+install(EXPORT openfst DESTINATION ${CMAKE_INSTALL_PREFIX})

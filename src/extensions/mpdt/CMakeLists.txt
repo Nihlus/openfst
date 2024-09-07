@@ -42,7 +42,7 @@ target_include_directories(fstmpdtscript
 
 install(
     TARGETS fstmpdtscript
-    EXPORT fstmpdtscript
+    EXPORT openfst
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

@@ -17,7 +17,7 @@ target_include_directories(fstngram
 
 install(
     TARGETS fstngram
-    EXPORT fstngram
+    EXPORT openfst
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -64,7 +64,7 @@ target_link_libraries(ngram-fst
 
 install(
     TARGETS ngram-fst
-    EXPORT ngram-fst
+    EXPORT openfst
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

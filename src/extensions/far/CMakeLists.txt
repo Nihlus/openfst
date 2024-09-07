@@ -51,7 +51,7 @@ target_link_libraries(fstfar
 
 install(
     TARGETS fstfar
-    EXPORT fstfar
+    EXPORT openfst
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -98,7 +98,7 @@ if (OPENFST_BIN)
 
     install(
         TARGETS fstfarscript
-        EXPORT fstfarscript
+        EXPORT openfst
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
