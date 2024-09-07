@@ -34,7 +34,7 @@ install(
 )
 
 foreach (SPECIAL_LIBRARY IN LISTS OPENFST_SPECIAL_LIBRARIES)
-    add_library(${SPECIAL_LIBRARY}-fst OBJECT)
+    add_library(${SPECIAL_LIBRARY}-fst ${OPENFST_OBJECT_LIBRARY_TYPE})
 
     set_target_properties(${SPECIAL_LIBRARY}-fst
         PROPERTIES

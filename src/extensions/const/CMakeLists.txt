@@ -33,7 +33,7 @@ install(
 )
 
 foreach (CONST_LIBRARY IN LISTS OPENFST_CONST_LIBRARIES)
-    add_library(${CONST_LIBRARY}-fst OBJECT)
+    add_library(${CONST_LIBRARY}-fst ${OPENFST_OBJECT_LIBRARY_TYPE})
 
     set_target_properties(${CONST_LIBRARY}-fst
         PROPERTIES

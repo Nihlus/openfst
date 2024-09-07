@@ -34,7 +34,7 @@ install(
 )
 
 foreach (LOOKAHEAD_LIBRARY IN LISTS OPENFST_LOOKAHEAD_LIBRARIES)
-    add_library(${LOOKAHEAD_LIBRARY}-fst OBJECT)
+    add_library(${LOOKAHEAD_LIBRARY}-fst ${OPENFST_OBJECT_LIBRARY_TYPE})
 
     set_target_properties(${LOOKAHEAD_LIBRARY}-fst
         PROPERTIES
