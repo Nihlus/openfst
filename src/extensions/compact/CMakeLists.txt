@@ -45,7 +45,7 @@ install(
 )
 
 foreach (COMPACT_LIBRARY IN LISTS OPENFST_COMPACT_LIBRARIES)
-    add_library(${COMPACT_LIBRARY}-fst ${OPENFST_OBJECT_LIBRARY_TYPE})
+    add_library(${COMPACT_LIBRARY}-fst OBJECT)
 
     set_target_properties(${COMPACT_LIBRARY}-fst
         PROPERTIES

@@ -33,53 +33,60 @@ install(
 )
 
 foreach (CONST_LIBRARY IN LISTS OPENFST_CONST_LIBRARIES)
-    add_library(${CONST_LIBRARY}-fst ${OPENFST_OBJECT_LIBRARY_TYPE})
+    if (OPENFST_SUPPORTS_OBJECT_LIBRARIES)
+        add_library(${CONST_LIBRARY}-fst OBJECT)
 
-    set_target_properties(${CONST_LIBRARY}-fst
-        PROPERTIES
-            VERSION 23.0.0
-            SOVERSION 23
-    )
+        set_target_properties(${CONST_LIBRARY}-fst
+            PROPERTIES
+                VERSION 23.0.0
+                SOVERSION 23
+        )
 
-    target_compile_features(${CONST_LIBRARY}-fst
-        PUBLIC
-            cxx_std_17
-    )
+        target_compile_features(${CONST_LIBRARY}-fst
+            PUBLIC
+                cxx_std_17
+        )
 
-    target_include_directories(${CONST_LIBRARY}-fst
-        PUBLIC
-            $<BUILD_INTERFACE:${OPENFST_INCLUDE_DIR}>
-            $<INSTALL_INTERFACE:include>
-    )
+        target_include_directories(${CONST_LIBRARY}-fst
+            PUBLIC
+                $<BUILD_INTERFACE:${OPENFST_INCLUDE_DIR}>
+                $<INSTALL_INTERFACE:include>
+        )
 
-    target_sources(${CONST_LIBRARY}-fst
-        PRIVATE
-            ${CONST_LIBRARY}-fst.cc
-    )
+        target_sources(${CONST_LIBRARY}-fst
+            PRIVATE
+                ${CONST_LIBRARY}-fst.cc
+        )
 
-    target_link_options(${CONST_LIBRARY}-fst
-        PRIVATE
-            LINKER:-avoid-version
-            LINKER:-module
-    )
+        target_link_options(${CONST_LIBRARY}-fst
+            PRIVATE
+                LINKER:-avoid-version
+                LINKER:-module
+        )
 
-    target_link_libraries(${CONST_LIBRARY}-fst
-        PUBLIC
-            fst
-    )
+        target_link_libraries(${CONST_LIBRARY}-fst
+            PUBLIC
+                fst
+        )
 
-    install(
-        TARGETS ${CONST_LIBRARY}-fst
-        EXPORT openfst
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-        FILE_SET HEADERS
-    )
+        install(
+            TARGETS ${CONST_LIBRARY}-fst
+            EXPORT openfst
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+            INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+            FILE_SET HEADERS
+        )
 
-    target_link_libraries(fstconst
-        PUBLIC
-            ${CONST_LIBRARY}-fst
-    )
+        target_link_libraries(fstconst
+            PUBLIC
+                ${CONST_LIBRARY}-fst
+        )
+    else ()
+        target_sources(fstconst
+            PRIVATE
+                ${CONST_LIBRARY}-fst.cc
+        )
+    endif ()
 endforeach ()

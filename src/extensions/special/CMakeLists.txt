@@ -34,59 +34,70 @@ install(
 )
 
 foreach (SPECIAL_LIBRARY IN LISTS OPENFST_SPECIAL_LIBRARIES)
-    add_library(${SPECIAL_LIBRARY}-fst ${OPENFST_OBJECT_LIBRARY_TYPE})
+    if (OPENFST_SUPPORTS_OBJECT_LIBRARIES)
+        add_library(${SPECIAL_LIBRARY}-fst OBJECT)
 
-    set_target_properties(${SPECIAL_LIBRARY}-fst
-        PROPERTIES
-            VERSION 23.0.0
-            SOVERSION 23
-    )
+        set_target_properties(${SPECIAL_LIBRARY}-fst
+            PROPERTIES
+                VERSION 23.0.0
+                SOVERSION 23
+        )
 
-    target_compile_features(${SPECIAL_LIBRARY}-fst
+        target_compile_features(${SPECIAL_LIBRARY}-fst
+                PUBLIC
+                cxx_std_17
+        )
+
+        target_include_directories(${SPECIAL_LIBRARY}-fst
             PUBLIC
-            cxx_std_17
-    )
+                $<BUILD_INTERFACE:${OPENFST_INCLUDE_DIR}>
+                $<INSTALL_INTERFACE:include>
+        )
 
-    target_include_directories(${SPECIAL_LIBRARY}-fst
-        PUBLIC
-            $<BUILD_INTERFACE:${OPENFST_INCLUDE_DIR}>
-            $<INSTALL_INTERFACE:include>
-    )
+        target_sources(${SPECIAL_LIBRARY}-fst
+            PRIVATE
+                ${SPECIAL_LIBRARY}-fst.cc
+            PUBLIC FILE_SET HEADERS
+            BASE_DIRS ${OPENFST_INCLUDE_DIR}
+            FILES
+                ${OPENFST_INCLUDE_DIR}/fst/extensions/special/${SPECIAL_LIBRARY}-fst.h
+        )
 
-    target_sources(${SPECIAL_LIBRARY}-fst
-        PRIVATE
-            ${SPECIAL_LIBRARY}-fst.cc
-        PUBLIC FILE_SET HEADERS
-        BASE_DIRS ${OPENFST_INCLUDE_DIR}
-        FILES
-            ${OPENFST_INCLUDE_DIR}/fst/extensions/special/${SPECIAL_LIBRARY}-fst.h
-    )
+        target_link_options(${SPECIAL_LIBRARY}-fst
+            PRIVATE
+                LINKER:-avoid-version
+                LINKER:-module
+        )
 
-    target_link_options(${SPECIAL_LIBRARY}-fst
-        PRIVATE
-            LINKER:-avoid-version
-            LINKER:-module
-    )
+        target_link_libraries(${SPECIAL_LIBRARY}-fst
+            PUBLIC
+                fst
+        )
 
-    target_link_libraries(${SPECIAL_LIBRARY}-fst
-        PUBLIC
-            fst
-    )
+        install(
+            TARGETS ${SPECIAL_LIBRARY}-fst
+            EXPORT openfst
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+            INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+            FILE_SET HEADERS
+        )
 
-    install(
-        TARGETS ${SPECIAL_LIBRARY}-fst
-        EXPORT openfst
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-        FILE_SET HEADERS
-    )
-
-    target_link_libraries(fstspecial
-        PUBLIC
-            ${SPECIAL_LIBRARY}-fst
-    )
+        target_link_libraries(fstspecial
+            PUBLIC
+                ${SPECIAL_LIBRARY}-fst
+        )
+    else ()
+        target_sources(fstspecial
+            PRIVATE
+                ${SPECIAL_LIBRARY}-fst.cc
+            PUBLIC FILE_SET HEADERS
+            BASE_DIRS ${OPENFST_INCLUDE_DIR}
+            FILES
+                ${OPENFST_INCLUDE_DIR}/fst/extensions/special/${SPECIAL_LIBRARY}-fst.h
+        )
+    endif ()
 endforeach ()
 
 if (OPENFST_BIN)

@@ -53,9 +53,9 @@ add_compile_options(
 
 if ("${CMAKE_GENERATOR}" STREQUAL "Xcode")
     # Xcode doesn't like object libraries
-    set(OPENFST_OBJECT_LIBRARY_TYPE STATIC)
+    set(OPENFST_SUPPORTS_OBJECT_LIBRARIES OFF)
 else ()
-    set(OPENFST_OBJECT_LIBRARY_TYPE OBJECT)
+    set(OPENFST_SUPPORTS_OBJECT_LIBRARIES ON)
 endif ()
 
 add_subdirectory(src)
