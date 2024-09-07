@@ -5,10 +5,16 @@ set(OPENFST_SPECIAL_LIBRARIES
 )
 
 add_library(fstspecial)
+
 set_target_properties(fstspecial
     PROPERTIES
         VERSION 23.0.0
         SOVERSION 23
+)
+
+target_compile_features(fstspecial
+        PUBLIC
+        cxx_std_17
 )
 
 target_include_directories(fstspecial
@@ -29,10 +35,16 @@ install(
 
 foreach (SPECIAL_LIBRARY IN LISTS OPENFST_SPECIAL_LIBRARIES)
     add_library(${SPECIAL_LIBRARY}-fst OBJECT)
+
     set_target_properties(${SPECIAL_LIBRARY}-fst
         PROPERTIES
             VERSION 23.0.0
             SOVERSION 23
+    )
+
+    target_compile_features(${SPECIAL_LIBRARY}-fst
+            PUBLIC
+            cxx_std_17
     )
 
     target_include_directories(${SPECIAL_LIBRARY}-fst
@@ -79,6 +91,11 @@ endforeach ()
 
 if (OPENFST_BIN)
     add_executable(fstspecial-bin)
+
+    target_compile_features(fstspecial-bin
+        PUBLIC
+            cxx_std_17
+    )
 
     set_target_properties(fstspecial-bin
         PROPERTIES

@@ -5,10 +5,16 @@ set(OPENFST_CONST_LIBRARIES
 )
 
 add_library(fstconst)
+
 set_target_properties(fstconst
     PROPERTIES
         VERSION 23.0.0
         SOVERSION 23
+)
+
+target_compile_features(fstconst
+    PUBLIC
+        cxx_std_17
 )
 
 target_include_directories(fstconst
@@ -28,10 +34,16 @@ install(
 
 foreach (CONST_LIBRARY IN LISTS OPENFST_CONST_LIBRARIES)
     add_library(${CONST_LIBRARY}-fst OBJECT)
+
     set_target_properties(${CONST_LIBRARY}-fst
         PROPERTIES
             VERSION 23.0.0
             SOVERSION 23
+    )
+
+    target_compile_features(${CONST_LIBRARY}-fst
+        PUBLIC
+            cxx_std_17
     )
 
     target_include_directories(${CONST_LIBRARY}-fst

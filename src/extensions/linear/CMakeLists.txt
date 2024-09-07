@@ -17,6 +17,11 @@ foreach (LINEAR_LIBRARY IN LISTS OPENFST_LINEAR_LIBRARIES)
             SOVERSION 23
     )
 
+    target_compile_features(${LINEAR_LIBRARY}-fst
+        PUBLIC
+            cxx_std_17
+    )
+
     target_sources(${LINEAR_LIBRARY}-fst
         PRIVATE
             ${LINEAR_LIBRARY}-fst.cc
@@ -67,6 +72,11 @@ if (OPENFST_BIN)
             SOVERSION 23
     )
 
+    target_compile_features(fstlinearscript
+        PUBLIC
+            cxx_std_17
+    )
+
     target_include_directories(fstlinearscript
         PUBLIC
             $<BUILD_INTERFACE:${OPENFST_INCLUDE_DIR}>
@@ -89,7 +99,7 @@ if (OPENFST_BIN)
 
     install(
         TARGETS fstlinearscript
-        EXPORT openfst
+        EXPORT fstlinearscript
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -99,6 +109,11 @@ if (OPENFST_BIN)
 
     foreach (LINEAR_PROGRAM IN LISTS OPENFST_LINEAR_PROGRAMS)
         add_executable(${LINEAR_PROGRAM})
+
+        target_compile_features(${LINEAR_PROGRAM}
+            PUBLIC
+                cxx_std_17
+        )
 
         target_sources(${LINEAR_PROGRAM}
             PRIVATE

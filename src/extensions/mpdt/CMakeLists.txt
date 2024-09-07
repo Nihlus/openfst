@@ -13,6 +13,11 @@ set_target_properties(fstmpdtscript
         SOVERSION 23
 )
 
+target_compile_features(fstmpdtscript
+    PUBLIC
+        cxx_std_17
+)
+
 target_sources(fstmpdtscript
     PRIVATE
         mpdtscript.cc
@@ -52,6 +57,11 @@ install(
 
 foreach (MPDT_PROGRAM IN LISTS OPENFST_MPDT_PROGRAMS)
     add_executable(${MPDT_PROGRAM})
+
+    target_compile_features(${MPDT_PROGRAM}
+        PUBLIC
+            cxx_std_17
+    )
 
     target_sources(${MPDT_PROGRAM}
         PRIVATE

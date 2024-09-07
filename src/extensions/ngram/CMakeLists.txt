@@ -3,10 +3,16 @@ set(OPENFST_NGRAM_LIBRARIES
 )
 
 add_library(fstngram)
+
 set_target_properties(fstngram
     PROPERTIES
         VERSION 23.0.0
         SOVERSION 23
+)
+
+target_compile_features(fstngram
+    PUBLIC
+        cxx_std_17
 )
 
 target_include_directories(fstngram
@@ -26,10 +32,16 @@ install(
 )
 
 add_library(ngram-fst OBJECT)
+
 set_target_properties(ngram-fst
     PROPERTIES
         VERSION 23.0.0
         SOVERSION 23
+)
+
+target_compile_features(ngram-fst
+    PUBLIC
+        cxx_std_17
 )
 
 target_include_directories(ngram-fst

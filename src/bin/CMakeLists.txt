@@ -41,6 +41,11 @@ set(OPENFST_PROGRAMS
 foreach (PROGRAM IN LISTS OPENFST_PROGRAMS)
     add_executable(${PROGRAM})
 
+    target_compile_features(${PROGRAM}
+        PUBLIC
+            cxx_std_17
+    )
+
     target_sources(${PROGRAM}
         PRIVATE
             ${PROGRAM}.cc

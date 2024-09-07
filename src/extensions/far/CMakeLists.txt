@@ -17,6 +17,11 @@ set_target_properties(fstfar
         SOVERSION 23
 )
 
+target_compile_features(fstfar
+    PUBLIC
+        cxx_std_17
+)
+
 target_include_directories(fstfar
     PUBLIC
         $<BUILD_INTERFACE:${OPENFST_INCLUDE_DIR}>
@@ -68,6 +73,11 @@ if (OPENFST_BIN)
             SOVERSION 23
     )
 
+    target_compile_features(fstfarscript
+        PUBLIC
+            cxx_std_17
+    )
+
     target_include_directories(fstfarscript
         PUBLIC
             $<BUILD_INTERFACE:${OPENFST_INCLUDE_DIR}>
@@ -108,6 +118,11 @@ if (OPENFST_BIN)
 
     foreach (FAR_PROGRAM IN LISTS OPENFST_FAR_PROGRAMS)
         add_executable(${FAR_PROGRAM})
+
+        target_compile_features(${FAR_PROGRAM}
+            PUBLIC
+                cxx_std_17
+        )
 
         target_sources(${FAR_PROGRAM}
             PRIVATE

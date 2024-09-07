@@ -5,10 +5,16 @@ set(OPENFST_LOOKAHEAD_LIBRARIES
 )
 
 add_library(fstlookahead)
+
 set_target_properties(fstlookahead
     PROPERTIES
         VERSION 23.0.0
         SOVERSION 23
+)
+
+target_compile_features(fstlookahead
+        PUBLIC
+        cxx_std_17
 )
 
 target_include_directories(fstlookahead
@@ -29,10 +35,16 @@ install(
 
 foreach (LOOKAHEAD_LIBRARY IN LISTS OPENFST_LOOKAHEAD_LIBRARIES)
     add_library(${LOOKAHEAD_LIBRARY}-fst OBJECT)
+
     set_target_properties(${LOOKAHEAD_LIBRARY}-fst
         PROPERTIES
             VERSION 23.0.0
             SOVERSION 23
+    )
+
+    target_compile_features(${LOOKAHEAD_LIBRARY}-fst
+        PUBLIC
+            cxx_std_17
     )
 
     target_include_directories(${LOOKAHEAD_LIBRARY}-fst

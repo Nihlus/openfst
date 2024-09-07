@@ -11,6 +11,11 @@ set_target_properties(pywrapfst
         SOVERSION 23
 )
 
+target_compile_features(pywrapfst
+    PUBLIC
+        cxx_std_17
+)
+
 target_sources(pywrapfst
     PRIVATE
         pywrapfst.cpp

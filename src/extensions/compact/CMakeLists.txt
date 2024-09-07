@@ -17,10 +17,16 @@ set(OPENFST_COMPACT_LIBRARIES
 )
 
 add_library(fstcompact)
+
 set_target_properties(fstcompact
     PROPERTIES
         VERSION 23.0.0
         SOVERSION 23
+)
+
+target_compile_features(fstcompact
+    PUBLIC
+        cxx_std_17
 )
 
 target_include_directories(fstcompact
@@ -40,10 +46,16 @@ install(
 
 foreach (COMPACT_LIBRARY IN LISTS OPENFST_COMPACT_LIBRARIES)
     add_library(${COMPACT_LIBRARY}-fst OBJECT)
+
     set_target_properties(${COMPACT_LIBRARY}-fst
         PROPERTIES
             VERSION 23.0.0
             SOVERSION 23
+    )
+
+    target_compile_features(${COMPACT_LIBRARY}-fst
+        PUBLIC
+            cxx_std_17
     )
 
     target_include_directories(${COMPACT_LIBRARY}-fst

@@ -6,6 +6,11 @@ set_target_properties(fst
         SOVERSION 23
 )
 
+target_compile_features(fst
+    PUBLIC
+        cxx_std_17
+)
+
 target_sources(fst
     PRIVATE
         compat.cc

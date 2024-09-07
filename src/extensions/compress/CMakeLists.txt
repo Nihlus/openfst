@@ -1,8 +1,14 @@
 add_library(fstcompressscript)
+
 set_target_properties(fstcompressscript
     PROPERTIES
         VERSION 23.0.0
         SOVERSION 23
+)
+
+target_compile_features(fstcompressscript
+    PUBLIC
+        cxx_std_17
 )
 
 target_include_directories(fstcompressscript
@@ -37,6 +43,11 @@ install(
 )
 
 add_executable(fstcompress)
+
+target_compile_features(fstcompress
+    PUBLIC
+        cxx_std_17
+)
 
 target_sources(fstcompress
     PRIVATE

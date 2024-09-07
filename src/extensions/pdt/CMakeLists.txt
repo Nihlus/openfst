@@ -15,6 +15,11 @@ set_target_properties(fstpdtscript
         SOVERSION 23
 )
 
+target_compile_features(fstpdtscript
+    PUBLIC
+        cxx_std_17
+)
+
 target_sources(fstpdtscript
     PRIVATE
         getters.cc
@@ -59,6 +64,11 @@ install(
 
 foreach (PDT_PROGRAM IN LISTS OPENFST_PDT_PROGRAMS)
     add_executable(${PDT_PROGRAM})
+
+    target_compile_features(${PDT_PROGRAM}
+        PUBLIC
+            cxx_std_17
+    )
 
     target_sources(${PDT_PROGRAM}
         PRIVATE
