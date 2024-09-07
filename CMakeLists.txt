@@ -44,12 +44,11 @@ project(openfst
     VERSION 1.8.0
 )
 
+include(GNUInstallDirs)
+
 add_compile_options(
     -fno-exceptions
     -Wno-deprecated-declarations
 )
-
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/cmake)
-set(OPENFST_BUILD_TARGETS_FILE ${CMAKE_CURRENT_BINARY_DIR}/cmake/openfst-targets.cmake)
 
 add_subdirectory(src)

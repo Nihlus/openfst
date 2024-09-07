@@ -17,10 +17,18 @@ target_include_directories(fstlookahead
         $<INSTALL_INTERFACE:include>
 )
 
-export(TARGETS fstlookahead APPEND FILE ${OPENFST_BUILD_TARGETS_FILE})
+install(
+    TARGETS fstlookahead
+    EXPORT fstlookahead
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    FILE_SET HEADERS
+)
 
 foreach (LOOKAHEAD_LIBRARY IN LISTS OPENFST_LOOKAHEAD_LIBRARIES)
-    add_library(${LOOKAHEAD_LIBRARY}-fst)
+    add_library(${LOOKAHEAD_LIBRARY}-fst OBJECT)
     set_target_properties(${LOOKAHEAD_LIBRARY}-fst
         PROPERTIES
             VERSION 23.0.0
@@ -49,8 +57,18 @@ foreach (LOOKAHEAD_LIBRARY IN LISTS OPENFST_LOOKAHEAD_LIBRARIES)
             fst
     )
 
-    target_sources(fstlookahead
-        PRIVATE
-            $<TARGET_OBJECTS:${LOOKAHEAD_LIBRARY}-fst>
+    install(
+        TARGETS ${LOOKAHEAD_LIBRARY}-fst
+        EXPORT ${LOOKAHEAD_LIBRARY}-fst
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILE_SET HEADERS
+    )
+
+    target_link_libraries(fstlookahead
+        PUBLIC
+            ${LOOKAHEAD_LIBRARY}-fst
     )
 endforeach ()

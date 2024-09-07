@@ -20,6 +20,14 @@ foreach (LINEAR_LIBRARY IN LISTS OPENFST_LINEAR_LIBRARIES)
     target_sources(${LINEAR_LIBRARY}-fst
         PRIVATE
             ${LINEAR_LIBRARY}-fst.cc
+        PUBLIC FILE_SET HEADERS
+        BASE_DIRS ${OPENFST_INCLUDE_DIR}
+        FILES
+            ${OPENFST_INCLUDE_DIR}/fst/extensions/linear/linear-fst-data-builder.h
+            ${OPENFST_INCLUDE_DIR}/fst/extensions/linear/linear-fst-data.h
+            ${OPENFST_INCLUDE_DIR}/fst/extensions/linear/linear-fst.h
+            ${OPENFST_INCLUDE_DIR}/fst/extensions/linear/loglinear-apply.h
+            ${OPENFST_INCLUDE_DIR}/fst/extensions/linear/trie.h
     )
 
     target_link_options(${LINEAR_LIBRARY}-fst
@@ -31,6 +39,16 @@ foreach (LINEAR_LIBRARY IN LISTS OPENFST_LINEAR_LIBRARIES)
     target_link_libraries(${LINEAR_LIBRARY}-fst
         PUBLIC
             fst
+    )
+
+    install(
+        TARGETS ${LINEAR_LIBRARY}-fst
+        EXPORT ${LINEAR_LIBRARY}-fst
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILE_SET HEADERS
     )
 
     target_include_directories(${LINEAR_LIBRARY}-fst
@@ -58,11 +76,25 @@ if (OPENFST_BIN)
     target_sources(fstlinearscript
         PRIVATE
             linearscript.cc
+        PUBLIC FILE_SET HEADERS
+        BASE_DIRS ${OPENFST_INCLUDE_DIR}
+        FILES
+            ${OPENFST_INCLUDE_DIR}/fst/extensions/linear/linearscript.h
     )
 
     target_link_libraries(fstlinearscript
         PRIVATE
             fstscript
+    )
+
+    install(
+        TARGETS fstlinearscript
+        EXPORT fstlinearscript
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILE_SET HEADERS
     )
 
     foreach (LINEAR_PROGRAM IN LISTS OPENFST_LINEAR_PROGRAMS)
@@ -78,7 +110,10 @@ if (OPENFST_BIN)
             PRIVATE
                 fstlinearscript
         )
-    endforeach ()
 
-    export(TARGETS fstlinearscript APPEND FILE ${OPENFST_BUILD_TARGETS_FILE})
+        install(
+            TARGETS ${LINEAR_PROGRAM}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        )
+    endforeach ()
 endif ()

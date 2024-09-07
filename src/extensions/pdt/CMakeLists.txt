@@ -19,10 +19,25 @@ target_sources(fstpdtscript
     PRIVATE
         getters.cc
         pdtscript.cc
+    PUBLIC FILE_SET HEADERS
+    BASE_DIRS ${OPENFST_INCLUDE_DIR}
+    FILES
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/pdt/collection.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/pdt/compose.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/pdt/expand.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/pdt/getters.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/pdt/info.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/pdt/paren.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/pdt/pdt.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/pdt/pdtlib.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/pdt/replace.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/pdt/reverse.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/pdt/shortest-path.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/pdt/pdtscript.h
 )
 
 target_link_libraries(fstpdtscript
-        PUBLIC
+    PUBLIC
         fstscript
 )
 
@@ -32,7 +47,15 @@ target_include_directories(fstpdtscript
         $<INSTALL_INTERFACE:include>
 )
 
-export(TARGETS fstpdtscript APPEND FILE ${OPENFST_BUILD_TARGETS_FILE})
+install(
+    TARGETS fstpdtscript
+    EXPORT fstpdtscript
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    FILE_SET HEADERS
+)
 
 foreach (PDT_PROGRAM IN LISTS OPENFST_PDT_PROGRAMS)
     add_executable(${PDT_PROGRAM})
@@ -46,5 +69,10 @@ foreach (PDT_PROGRAM IN LISTS OPENFST_PDT_PROGRAMS)
     target_link_libraries(${PDT_PROGRAM}
         PRIVATE
             fstpdtscript
+    )
+
+    install(
+        TARGETS ${PDT_PROGRAM}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     )
 endforeach ()

@@ -27,6 +27,21 @@ target_sources(fstfar
     PRIVATE
         sttable.cc
         stlist.cc
+    PUBLIC FILE_SET HEADERS
+    BASE_DIRS ${OPENFST_INCLUDE_DIR}
+    FILES
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/far/stlist.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/far/sttable.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/far/far.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/far/compile-strings.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/far/convert.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/far/create.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/far/equal.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/far/extract.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/far/farlib.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/far/info.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/far/isomorphic.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/far/print-strings.h
 )
 
 target_link_libraries(fstfar
@@ -34,7 +49,15 @@ target_link_libraries(fstfar
         fst
 )
 
-export(TARGETS fstfar APPEND FILE ${OPENFST_BUILD_TARGETS_FILE})
+install(
+    TARGETS fstfar
+    EXPORT fstfar
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    FILE_SET HEADERS
+)
 
 if (OPENFST_BIN)
     add_library(fstfarscript)
@@ -58,6 +81,14 @@ if (OPENFST_BIN)
             getters.cc
             script-impl.cc
             strings.cc
+        PUBLIC FILE_SET HEADERS
+        BASE_DIRS ${OPENFST_INCLUDE_DIR}
+        FILES
+            ${OPENFST_INCLUDE_DIR}/fst/extensions/far/compile-strings.h
+            ${OPENFST_INCLUDE_DIR}/fst/extensions/far/far-class.h
+            ${OPENFST_INCLUDE_DIR}/fst/extensions/far/farscript.h
+            ${OPENFST_INCLUDE_DIR}/fst/extensions/far/getters.h
+            ${OPENFST_INCLUDE_DIR}/fst/extensions/far/script-impl.h
     )
 
     target_link_libraries(fstfarscript
@@ -65,7 +96,15 @@ if (OPENFST_BIN)
         fstscript
     )
 
-    export(TARGETS fstfarscript APPEND FILE ${OPENFST_BUILD_TARGETS_FILE})
+    install(
+        TARGETS fstfarscript
+        EXPORT fstfarscript
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILE_SET HEADERS
+    )
 
     foreach (FAR_PROGRAM IN LISTS OPENFST_FAR_PROGRAMS)
         add_executable(${FAR_PROGRAM})
@@ -79,6 +118,11 @@ if (OPENFST_BIN)
         target_link_libraries(${FAR_PROGRAM}
             PRIVATE
                 fstfarscript
+        )
+
+        install(
+            TARGETS ${FAR_PROGRAM}
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         )
     endforeach ()
 endif ()

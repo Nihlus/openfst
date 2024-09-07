@@ -51,4 +51,9 @@ foreach (PROGRAM IN LISTS OPENFST_PROGRAMS)
         PRIVATE
             fstscript
     )
+
+    install(
+        TARGETS ${PROGRAM}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
 endforeach ()

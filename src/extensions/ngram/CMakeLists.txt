@@ -15,9 +15,17 @@ target_include_directories(fstngram
         $<INSTALL_INTERFACE:include>
 )
 
-export(TARGETS fstngram APPEND FILE ${OPENFST_BUILD_TARGETS_FILE})
+install(
+    TARGETS fstngram
+    EXPORT fstngram
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    FILE_SET HEADERS
+)
 
-add_library(ngram-fst)
+add_library(ngram-fst OBJECT)
 set_target_properties(ngram-fst
     PROPERTIES
         VERSION 23.0.0
@@ -35,6 +43,12 @@ target_sources(ngram-fst
         bitmap-index.cc
         ngram-fst.cc
         nthbit.cc
+    PUBLIC FILE_SET HEADERS
+    BASE_DIRS ${OPENFST_INCLUDE_DIR}
+    FILES
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/ngram/bitmap-index.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/ngram/ngram-fst.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/ngram/nthbit.h
 )
 
 target_link_options(ngram-fst
@@ -48,7 +62,17 @@ target_link_libraries(ngram-fst
         fst
 )
 
-target_sources(fstngram
-    PRIVATE
-        $<TARGET_OBJECTS:ngram-fst>
+install(
+    TARGETS ngram-fst
+    EXPORT ngram-fst
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    FILE_SET HEADERS
+)
+
+target_link_libraries(fstngram
+    PUBLIC
+        ngram-fst
 )

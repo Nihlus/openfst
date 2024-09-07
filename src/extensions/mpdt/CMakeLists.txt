@@ -16,6 +16,17 @@ set_target_properties(fstmpdtscript
 target_sources(fstmpdtscript
     PRIVATE
         mpdtscript.cc
+    PUBLIC FILE_SET HEADERS
+    BASE_DIRS ${OPENFST_INCLUDE_DIR}
+    FILES
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/mpdt/compose.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/mpdt/expand.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/mpdt/info.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/mpdt/mpdt.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/mpdt/mpdtlib.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/mpdt/read_write_utils.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/mpdt/reverse.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/mpdt/mpdtscript.h
 )
 
 target_link_libraries(fstmpdtscript
@@ -29,7 +40,15 @@ target_include_directories(fstmpdtscript
         $<INSTALL_INTERFACE:include>
 )
 
-export(TARGETS fstmpdtscript APPEND FILE ${OPENFST_BUILD_TARGETS_FILE})
+install(
+    TARGETS fstmpdtscript
+    EXPORT fstmpdtscript
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    FILE_SET HEADERS
+)
 
 foreach (MPDT_PROGRAM IN LISTS OPENFST_MPDT_PROGRAMS)
     add_executable(${MPDT_PROGRAM})
@@ -43,5 +62,10 @@ foreach (MPDT_PROGRAM IN LISTS OPENFST_MPDT_PROGRAMS)
     target_link_libraries(${MPDT_PROGRAM}
         PRIVATE
             fstmpdtscript
+    )
+
+    install(
+        TARGETS ${MPDT_PROGRAM}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     )
 endforeach ()

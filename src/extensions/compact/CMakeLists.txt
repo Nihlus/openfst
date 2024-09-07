@@ -29,10 +29,17 @@ target_include_directories(fstcompact
         $<INSTALL_INTERFACE:include>
 )
 
-export(TARGETS fstcompact APPEND FILE ${OPENFST_BUILD_TARGETS_FILE})
+install(
+    TARGETS fstcompact
+    EXPORT fstcompact
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
 
 foreach (COMPACT_LIBRARY IN LISTS OPENFST_COMPACT_LIBRARIES)
-    add_library(${COMPACT_LIBRARY}-fst)
+    add_library(${COMPACT_LIBRARY}-fst OBJECT)
     set_target_properties(${COMPACT_LIBRARY}-fst
         PROPERTIES
             VERSION 23.0.0
@@ -61,8 +68,18 @@ foreach (COMPACT_LIBRARY IN LISTS OPENFST_COMPACT_LIBRARIES)
             fst
     )
 
-    target_sources(fstcompact
-        PRIVATE
-            $<TARGET_OBJECTS:${COMPACT_LIBRARY}-fst>
+    install(
+        TARGETS ${COMPACT_LIBRARY}-fst
+        EXPORT ${COMPACT_LIBRARY}-fst
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILE_SET HEADERS
+    )
+
+    target_link_libraries(fstcompact
+        PUBLIC
+            ${COMPACT_LIBRARY}-fst
     )
 endforeach ()

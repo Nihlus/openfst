@@ -14,6 +14,11 @@ target_include_directories(fstcompressscript
 target_sources(fstcompressscript
     PRIVATE
         compressscript.cc
+    INTERFACE FILE_SET HEADERS
+    BASE_DIRS ${OPENFST_INCLUDE_DIR}
+    FILES
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/compress/compress.h
+        ${OPENFST_INCLUDE_DIR}/fst/extensions/compress/elias.h
 )
 
 target_link_libraries(fstcompressscript
@@ -21,7 +26,15 @@ target_link_libraries(fstcompressscript
         fstscript
 )
 
-export(TARGETS fstcompressscript APPEND FILE ${OPENFST_BUILD_TARGETS_FILE})
+install(
+    TARGETS fstcompressscript
+    EXPORT fstcompresscript
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    FILE_SET HEADERS
+)
 
 add_executable(fstcompress)
 
@@ -34,4 +47,10 @@ target_sources(fstcompress
 target_link_libraries(fstcompress
     PRIVATE
         fstcompressscript
+)
+
+install(
+    TARGETS fstcompress
+    EXPORT fst
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

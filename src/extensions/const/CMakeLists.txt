@@ -17,10 +17,17 @@ target_include_directories(fstconst
         $<INSTALL_INTERFACE:include>
 )
 
-export(TARGETS fstconst APPEND FILE ${OPENFST_BUILD_TARGETS_FILE})
+install(
+    TARGETS fstconst
+    EXPORT fstconst
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
 
 foreach (CONST_LIBRARY IN LISTS OPENFST_CONST_LIBRARIES)
-    add_library(${CONST_LIBRARY}-fst)
+    add_library(${CONST_LIBRARY}-fst OBJECT)
     set_target_properties(${CONST_LIBRARY}-fst
         PROPERTIES
             VERSION 23.0.0
@@ -49,8 +56,18 @@ foreach (CONST_LIBRARY IN LISTS OPENFST_CONST_LIBRARIES)
             fst
     )
 
-    target_sources(fstconst
-        PRIVATE
-            $<TARGET_OBJECTS:${CONST_LIBRARY}-fst>
+    install(
+        TARGETS ${CONST_LIBRARY}-fst
+        EXPORT ${CONST_LIBRARY}-fst
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILE_SET HEADERS
+    )
+
+    target_link_libraries(fstconst
+        PUBLIC
+            ${CONST_LIBRARY}-fst
     )
 endforeach ()

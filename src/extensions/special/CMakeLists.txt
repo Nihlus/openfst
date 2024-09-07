@@ -17,10 +17,18 @@ target_include_directories(fstspecial
         $<INSTALL_INTERFACE:include>
 )
 
-export(TARGETS fstspecial APPEND FILE ${OPENFST_BUILD_TARGETS_FILE})
+install(
+    TARGETS fstspecial
+    EXPORT fstspecial
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    FILE_SET HEADERS
+)
 
 foreach (SPECIAL_LIBRARY IN LISTS OPENFST_SPECIAL_LIBRARIES)
-    add_library(${SPECIAL_LIBRARY}-fst)
+    add_library(${SPECIAL_LIBRARY}-fst OBJECT)
     set_target_properties(${SPECIAL_LIBRARY}-fst
         PROPERTIES
             VERSION 23.0.0
@@ -36,6 +44,10 @@ foreach (SPECIAL_LIBRARY IN LISTS OPENFST_SPECIAL_LIBRARIES)
     target_sources(${SPECIAL_LIBRARY}-fst
         PRIVATE
             ${SPECIAL_LIBRARY}-fst.cc
+        PUBLIC FILE_SET HEADERS
+        BASE_DIRS ${OPENFST_INCLUDE_DIR}
+        FILES
+            ${OPENFST_INCLUDE_DIR}/fst/extensions/special/${SPECIAL_LIBRARY}-fst.h
     )
 
     target_link_options(${SPECIAL_LIBRARY}-fst
@@ -49,9 +61,19 @@ foreach (SPECIAL_LIBRARY IN LISTS OPENFST_SPECIAL_LIBRARIES)
             fst
     )
 
-    target_sources(fstspecial
-        PRIVATE
-            $<TARGET_OBJECTS:${SPECIAL_LIBRARY}-fst>
+    install(
+        TARGETS ${SPECIAL_LIBRARY}-fst
+        EXPORT ${SPECIAL_LIBRARY}-fst
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILE_SET HEADERS
+    )
+
+    target_link_libraries(fstspecial
+        PUBLIC
+            ${SPECIAL_LIBRARY}-fst
     )
 endforeach ()
 
@@ -77,5 +99,10 @@ if (OPENFST_BIN)
     target_include_directories(fstspecial-bin
         PRIVATE
             ${OPENFST_BIN_SOURCE_DIR}
+    )
+
+    install(
+        TARGETS fstspecial-bin
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     )
 endif ()
